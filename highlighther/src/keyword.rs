@@ -72,7 +72,7 @@ pub mod directives {
     );
 
         pub fn from_str(s: &str) -> Option<Self> {
-            match s {
+            match s.to_lowercase().as_str() {
                 SOURCE => Some(Directives::Source),
                 MATCH => Some(Directives::Match),
                 FILTER => Some(Directives::Filter),
@@ -102,5 +102,26 @@ pub mod directives {
                 _ => false,
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use directives::Directives;
+
+    use super::*;
+    #[test]
+    fn test_directives() {
+        let source = Directives::Source;
+        assert_eq!(source.to_string(), "source");
+        assert_eq!(source.color(), "red");
+        assert_eq!(Directives::from_str("source"), Some(Directives::Source));
+        assert_eq!(Directives::from_str("match"), Some(Directives::Match));
+        assert_eq!(Directives::from_str("filter"), Some(Directives::Filter));
+        assert_eq!(Directives::from_str("system"), Some(Directives::System));
+        assert_eq!(Directives::from_str("label"), Some(Directives::Label));
+        assert_eq!(Directives::from_str("worker"), Some(Directives::Worker));
+        assert_eq!(Directives::from_str("include"), Some(Directives::Include));
+        assert_eq!(Directives::from_str("invalid"), None);
     }
 }
