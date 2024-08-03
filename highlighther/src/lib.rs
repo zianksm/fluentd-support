@@ -1,2 +1,1 @@
-mod keyword;
-mod color;
+pub mod color;
