@@ -1,5 +1,5 @@
 [workspace]
-members = ["highlither"]
+members = ["highlighther"]
 
 [workspace.dependencies]
 nom = "7.1.3"
