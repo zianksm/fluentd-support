@@ -1,6 +1,6 @@
 use highlighther::color::Color;
 
-use crate::const_key;
+use crate::{ attributes::*, const_key };
 
 const_key!(
     SOURCE: "source"
@@ -14,13 +14,13 @@ const_key!(
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Directives {
-    Source,
-    Match,
-    Filter,
-    System,
-    Label,
-    Worker,
-    Include,
+    Source(Vec<Attributes>),
+    Match(Vec<Attributes>),
+    Filter(Vec<Attributes>),
+    System(Vec<Records>),
+    Label(Vec<Directives>),
+    Worker(Vec<Directives>),
+    Include(IncludeValue),
 }
 
 impl ToString for Directives {
@@ -46,28 +46,15 @@ impl Directives {
         INCLUDE
     );
 
-    pub fn from_str(s: &str) -> Option<Self> {
-        match s.to_lowercase().as_str() {
-            SOURCE => Some(Directives::Source),
-            MATCH => Some(Directives::Match),
-            FILTER => Some(Directives::Filter),
-            SYSTEM => Some(Directives::System),
-            LABEL => Some(Directives::Label),
-            WORKER => Some(Directives::Worker),
-            INCLUDE => Some(Directives::Include),
-            _ => None,
-        }
-    }
-
     pub fn to_str(&self) -> &str {
         match self {
-            Directives::Source => SOURCE,
-            Directives::Match => MATCH,
-            Directives::Filter => FILTER,
-            Directives::System => SYSTEM,
-            Directives::Label => LABEL,
-            Directives::Worker => WORKER,
-            Directives::Include => INCLUDE,
+            Directives::Source(_) => SOURCE,
+            Directives::Match(_) => MATCH,
+            Directives::Filter(_) => FILTER,
+            Directives::System(_) => SYSTEM,
+            Directives::Label(_) => LABEL,
+            Directives::Worker(_) => WORKER,
+            Directives::Include(_) => INCLUDE,
         }
     }
 
@@ -76,26 +63,5 @@ impl Directives {
             SOURCE | MATCH | FILTER | SYSTEM | LABEL | WORKER | INCLUDE => true,
             _ => false,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use directives::Directives;
-
-    use super::*;
-    #[test]
-    fn test_directives() {
-        let source = Directives::Source;
-        assert_eq!(source.to_string(), "source");
-        assert_eq!(source.color(), "red");
-        assert_eq!(Directives::from_str("source"), Some(Directives::Source));
-        assert_eq!(Directives::from_str("match"), Some(Directives::Match));
-        assert_eq!(Directives::from_str("filter"), Some(Directives::Filter));
-        assert_eq!(Directives::from_str("system"), Some(Directives::System));
-        assert_eq!(Directives::from_str("label"), Some(Directives::Label));
-        assert_eq!(Directives::from_str("worker"), Some(Directives::Worker));
-        assert_eq!(Directives::from_str("include"), Some(Directives::Include));
-        assert_eq!(Directives::from_str("invalid"), None);
     }
 }

@@ -4,7 +4,7 @@ pub trait Color {
 
 #[macro_export]
 macro_rules! color {
-    ($($color:ident)*) => {
+    ($($color:ident),*) => {
         $(
             paste::paste!{
                 pub struct $color;
@@ -18,4 +18,4 @@ macro_rules! color {
     };
 }
 
-color!(Red);
+color!(Red, Blue);

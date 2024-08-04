@@ -1,4 +1,5 @@
 mod directives;
+mod attributes;
 
 #[macro_export(local_inner_macros)]
 macro_rules! const_key {
